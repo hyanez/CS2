@@ -1,0 +1,436 @@
+//Hugo Yanez
+//Feb. 28, 2017
+//Name header file
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Name{
+
+   public:
+      //Constructors
+      Name();//Default Constructor
+      Name(string, char, string);//Customized Constructor that takes in three arguments
+
+      //Methods
+      void inputName();
+      void display();
+            
+
+      //Mutator Methods
+      bool setName(string, char, string);
+      bool setFirst(string);
+      bool setMiddle(char);
+      bool setLast(string);
+      
+      //Accessor Methods
+      string getFirst();
+      char getMiddle();
+      string getLast();
+     
+
+   private:
+      string first, last;
+      char middle; 
+
+
+};
+//Hugo Yanez
+//Feb. 15, 2017
+//Program that uses classes to save and output information.
+
+#include <iostream>
+using namespace std;
+
+class Date{
+   public:
+      //Constructors
+      Date(){  // Default Constructor
+         month = day = year = 0;
+      }
+      Date(int m, int d, int y){ //Customized Constructor
+         month = m;
+         day = d;
+         year = y;
+      }
+      Date(int m, int y):Date(){ 
+         month = m;
+         year = y;
+      }
+      //Mutator Methods
+      bool setMonth(int m){
+         bool valid = false;
+         if(m>0 && m<=12){
+            month = m;
+            valid = true;
+         }
+         return(valid);
+      }
+      
+      bool setDay(int d){
+         bool valid = false;
+         if(d>0 && d<=31){
+            day = d;
+            valid = true;
+         }
+      }
+      //Method to display the contents of the data members
+      void display(){
+         cout << "Date: " << month << "/"
+              << day << "/" 
+              << year << endl;
+              
+      }
+      //Method to populate external user input
+      void input(){
+         int m, d = 0;
+         cout << endl;
+         do{
+            if(!m)
+               cout <<"Enter month: ";
+            else
+               cout << m << " is not a valid month, enter again: ";
+            cin >> m;
+         }while(!setMonth(m));
+      
+         do{
+            if(!d)
+               cout <<"Enter day: ";
+            else
+               cout << d << " is not a valid day, enter again: ";
+            cin >> d;
+         }while(!setDay(d));
+     
+         cout << "Enter year: ";
+         cin >> year;
+      }
+      //Accessor Methods
+      int getMonth(){
+         
+         return(month);
+      }
+
+      int getDay(){
+
+         return(day);
+      }
+
+     int getYear(){
+
+        return(year);
+     }
+     
+
+
+
+
+   private:
+   int month, day, year;
+
+
+
+};
+//Hugo Yanez
+//Program header file
+//Feb. 28, 2017
+
+#include <iostream>
+using namespace std;
+
+class Program{
+   public:
+
+      //Constructors
+      Program(){
+         campus = degree= minor = "None";
+         major = "Undeclared";
+      }
+      Program(string camp, string deg, string maj, string min){
+         campus = camp;
+         degree = deg;
+         minor = min;
+         major = maj;
+      } 
+
+      //Methods
+      void input(){
+         string camp = "None";
+         string deg = "None";
+         cout << endl;
+         do{
+            if(camp != "None")
+               cout <<"Enter campus: ";
+            else
+               cout << camp <<" is an invalid campus, enter again: ";
+            cin >> camp;
+         }while(!setCampus(camp));     
+        
+         do{
+            if(deg != "None")
+               cout <<"Enter degree : ";
+            else
+               cout << deg << " is an invalid degree, enter again: ";
+            cin >> deg; 
+         }while(!setDegree(deg));    
+         
+         cout << "Enter Major: ";
+         cin >> major;
+         
+         cout << "Enter Minor: ";
+         cin >> minor;
+      }
+      
+      
+      void display(){
+         cout <<"Campus: " << campus << endl;
+         cout <<"Degree: " << degree << endl;
+         cout <<"Major: " << major << endl;
+         cout <<"Minor: " << minor << endl;
+      }
+
+      //Mutator Method
+      bool setCampus(string camp){
+         bool valid = true;
+            if(camp != "RH" && camp != "LC" && camp != "WC") 
+               valid = false;
+            else
+               campus = camp;
+          return(valid);
+      }
+   
+      bool setDegree(string deg){
+         bool valid = true;
+            if(deg != "BS" && deg != "BA")
+               valid = false;
+            else
+               degree = deg;
+         return(valid);
+      }
+      //Accessor Methods
+      string getCampus(){
+         return(campus);
+      }
+    
+      string getDegree(){
+         return(degree);
+      }
+ 
+      string getMajor(){
+          return(major);
+      }
+      
+      string getMinor(){
+           return(minor);
+      }
+    
+
+
+
+
+
+
+
+
+
+
+   private:
+ 
+   string campus, degree, major, minor;
+
+};
+//Hugo Yanez
+//February 24, 2017
+//Class that contains all the information of a Fordham University student
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student{
+
+  
+   public:
+      //Class Constructors
+      Student(); //Default Constructor
+      Student(string, char, string, int, int, int);//Custom Constructor    
+    
+      //Class level external input/output
+      void input(string, string);
+      void display();
+      
+      //Mutator methods
+      bool setDate(int, int, int);
+      bool setMonth(int);
+      bool setDay(int);      
+
+      int retMonth();
+      int retDay();
+      int retYear();
+   private:
+      int month, day, year;
+      string first, last, gender, id;
+      char middle;
+      Name obj;
+      Date obj;
+      Program obj;
+
+};
+//Hugo Yanez
+//February 24, 2017
+//File that contains all information of a Fordham University student in a student header file
+
+#include "student.h"
+
+//Class Definitions
+//Default constructor which sets the data members to the default date 0.0.0
+Student::Student(){
+      
+   month = day = year = 0;
+   first = last = "Unknown";
+   middle = '?'; 
+}
+
+
+//Constructor which takes in six arguments and initializes the data members to each argument
+Student::Student(string a, char b, string c, int m, int d, int y){
+   
+   first = a;
+   middle = b;
+   last = c;
+   
+   month = m;
+   day = d;
+   year = y;
+   
+}
+
+//Input method to populate the data members from external user input.
+void Student::input(string gen, string ids){
+   gender = gen;
+   id = ids;
+   cout << endl;
+   cout <<"Enter Fordham ID: ";
+   cin >> id;
+   
+   cout <<"Enter gender: ";
+   cin >> gender; 
+   cout << endl;
+}
+
+//Mutator methods for each data member that doesn't fall within range
+bool Student::setMonth(int m){
+   bool stat = false;
+   
+   if(m>0 && m<=12){
+      month = m;
+      stat=true;
+   }
+   return(stat);
+}
+
+bool Student::setDay(int d){
+   bool stat = false;
+      
+   if(d<0 && day<=31){
+      day = d;
+      stat = true;
+   }
+   return(stat);
+}
+     
+bool Student::setDate(int m, int d, int y){
+   bool stat = false;
+      
+   if(setMonth(m) && setDay(d)){
+      year = y;
+      stat =true;
+   }
+   return(stat);
+}
+
+int Student::retMonth(){
+   
+   return(month);
+}
+
+int Student::retDay(){
+  
+   return(day);
+}
+
+int Student::retYear(){
+
+   return(year);
+}
+
+//Display method that displays the concents of all the data members
+void Student::display(){
+   cout << endl;
+   cout << "Name: " << first << " "  
+        << middle << " " 
+        << last << endl;
+   cout << "Fordham ID: " << id << endl;
+   cout << "Date of Birth: " << month << "/" 
+        << day << "/" 
+        << year << endl;
+   cout << "Gender: " << gender << endl;
+}
+
+
+int main(){
+   void test(Student &);
+ 
+   int month;
+   
+   Student s1("Connor", 'D', "Walsh", 13, 21, 1998);
+   Student s2("Hugo", 'D', "Yanez", 6, 26, 1997);
+   Student s3;   
+   
+   cout <<"Testing Student 1: " << endl;
+   test( s1 );
+   cout << endl;
+   /*while(!s1.setMonth){
+      cout <<"Invalid Month!"<<endl;
+      cout <<"Enter date : ";
+      cin >> month;
+   }*/
+   cout <<"Student 1: " << endl;
+   s1.display();
+   cout << endl; 
+   
+   cout <<"Testing Student 2: " << endl;
+   test( s2 );
+   cout << endl;
+   cout <<"Student 2: " << endl;
+   s2.display();
+   cout << endl;
+  
+   cout <<"Testing Student 3: " << endl;
+   test( s3 );
+   cout << endl;
+   cout <<"Student 3: " << endl;
+   s3.display();
+   cout << endl;
+   
+}
+
+//Functions that tests each method with each object by passing it one argument by reference
+void test(Student &s){
+   string gen, ids;
+   int month, day, year;
+    
+   s.display();
+   s.input(gen, ids);
+   s.display();
+   /*while(!s.setMonth){
+      cout << "Invalid Month!" << endl;
+      cout << "Enter Month : ";
+      cin >> month; 
+   }*/
+   s.setDate(month, day, year);
+}
+
