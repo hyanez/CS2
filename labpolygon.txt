@@ -1,0 +1,462 @@
+//Hugo Yanez
+//March 22, 2017
+//Polygon header file that contains the definition of the class Polygon
+
+#include <iostream>
+using namespace std;
+
+class Polygon{
+   public:
+      Polygon();//Default Constructor
+      Polygon(int, int);
+      Polygon(int, int, int, int);//Custom Constructor     
+      ~Polygon();//Destructor         
+
+      //Methods
+      void display();
+      void input();
+      int calcArea(int, int);
+      int calcPerimeter(int, int);
+      void averageArea();
+      void averagePerimeter();
+      void drawingPoly();
+  
+      //Mutator Methods
+      bool setLength(int);
+      bool setWidth(int);
+
+      //Accessor Methods
+      static int getnumPolygons();
+      static int getMaxPolygons();
+      static int getTotalArea();
+      static int getTotalPerimeter();
+      static int getAvgArea();
+      static int getAvgPerimeter();
+   private:
+      static const int MAX_POLYGONS = 25;
+      static int numPolygons, totArea, totPerimeter, avgArea, avgPerimeter;
+      int length, width, perimeter, area;
+      const int min, max;
+      static const int DEFAULT_MIN = 10, DEFAULT_MAX = 100;     
+
+ 
+
+};
+//Hugo Yanez
+//March 22, 2017
+//File containing the polygon header file
+
+#include "polygon.h"
+//Declaration of Static Variables
+int Polygon::numPolygons=0;
+int Polygon::totArea = 0;
+int Polygon::totPerimeter=0;
+int Polygon::avgArea=0;
+int Polygon::avgPerimeter=0;
+
+//Default constructor
+Polygon::Polygon():min(DEFAULT_MIN), max(DEFAULT_MAX){
+   length = width = 0;
+   area = calcArea(length, width);
+   perimeter = calcPerimeter(length, width);
+   numPolygons++; 
+
+}
+
+Polygon::Polygon(int mn, int mx):min(mn), max(mx){
+   length = width = 0;
+   perimeter = calcPerimeter(length, width);
+   area = calcArea(length, width);
+   numPolygons++;
+   
+}
+
+//Custom Constructor
+Polygon::Polygon(int mn, int mx, int len, int wid):min(mn), max(mx){
+   length = len;
+   width = wid;
+   perimeter = calcPerimeter(len, wid);
+   area = calcArea(len, wid);
+   numPolygons++;
+ 
+}
+
+//Destructor
+Polygon::~Polygon(){
+   cout << "Destructor" << endl;
+
+}
+
+
+//Method that displays the statistics of polygons
+void Polygon::display(){
+   cout << "Length: " << length << endl;
+   cout << "Width: " << width << endl;
+   cout << "Perimeter: " << calcPerimeter(length, width) << endl;
+   cout << "Area: " << calcArea(length, width) << endl;
+   cout << "Min: " << min << endl;
+   cout << "Max: " << max << endl;
+   cout << "Maximum number of Polygons: " << MAX_POLYGONS << endl;
+   cout << "Total Area: " << totArea << endl;
+   cout << "Total Perimeter: "<< totPerimeter << endl;
+   cout << "Number of Polygons: " << getnumPolygons() << endl;
+   cout << "Average Area: " << getAvgArea() << endl;
+   cout << "Average Perimeter: " << getAvgPerimeter() << endl;
+
+}
+
+//Method that populates the data members length and width from external user input
+void Polygon::input(){
+   cout << endl;
+   do{
+      cout << "Input Length:";
+      cin >> length;
+   }while(!setLength(length));
+   
+   do{
+      cout << "Input Width:";
+      cin >> width;
+   }while(!setWidth(width));
+
+}
+
+//Method that calculates the area of the polygon
+int Polygon::calcArea(int len, int wid){
+
+   area = len * wid; 
+   totArea += area;   
+  
+   return(area); 
+}
+
+//Method that calculates the perimeter of the polygon
+int Polygon::calcPerimeter(int len, int wid){
+
+   perimeter = (2*len)+(2*wid);
+   totPerimeter += perimeter;
+
+   return(perimeter);
+}
+
+//Method that draws a polygon of the specified length and width
+void Polygon::drawingPoly(){
+
+  for(int row=0; row<length; row++){
+     for(int colm=0; colm<width; colm++){
+        cout << "*";
+     }
+     cout << endl;
+  }
+
+
+}
+
+void Polygon::averageArea(){
+   avgArea = totArea/numPolygons;
+
+}
+
+void Polygon::averagePerimeter(){
+   avgPerimeter = totPerimeter/numPolygons;
+
+}
+
+//Mutator Methods
+bool Polygon::setLength(int len){
+   bool valid = false;
+   if(len >= min && len <= max){
+      length = len;
+      valid = true;
+   }
+
+   return(valid);
+}
+
+bool Polygon::setWidth(int wid){
+   bool valid = false;
+   if(wid >= min && wid <= max){
+      width = wid;
+      valid = true;
+   }
+
+   return(valid);
+}
+
+//Accessor Method
+int Polygon::getnumPolygons(){
+   
+   return(numPolygons);
+}
+
+int Polygon::getMaxPolygons(){
+
+   return(MAX_POLYGONS);
+}
+
+int Polygon::getTotalArea(){
+
+   return(totArea);
+}
+
+int Polygon::getTotalPerimeter(){
+
+   return(totPerimeter);
+}
+
+int Polygon::getAvgArea(){
+   avgArea = totArea/numPolygons;
+   return(avgArea);
+}
+  
+int Polygon::getAvgPerimeter(){
+   avgPerimeter= totPerimeter/numPolygons;
+   return(avgPerimeter);
+}
+
+main(){
+   string choice;
+   int i, num, option;
+   Polygon one;
+   Polygon two(1, 10, 3, 4);
+   Polygon *three[Polygon::getMaxPolygons()];   
+   Polygon *p[num];
+   
+   cout << "Default Constructor: " << endl;
+   one.display();
+   cout << endl;
+   
+   cout << "Custom Constructor: " << endl;
+   two.display();
+   two.drawingPoly();
+   
+   
+   /*do{
+      cout << endl;
+      cout << "Do you want to make a Polygon?" << endl;
+      cin >> choice;
+     
+	if(choice=="yes") 
+	{	
+	   three[Polygon::getnumPolygons()-1] = new Polygon;
+           three[Polygon::getnumPolygons()-1]->input();
+           three[Polygon::getnumPolygons()-1]->drawingPoly();
+           three[Polygon::getnumPolygons()-1]->display();
+           delete three[Polygon::getnumPolygons()-1];
+	}
+ 
+   }while(choice == "yes" && Polygon::getnumPolygons() < Polygon::getMaxPolygons());*/
+   
+   do{
+      cout << endl;
+      cout << "Which option would you like to pick?" << endl;
+      cout << endl;
+      cout << "1. Build a new polygon object." << endl;
+      cout << "2. Draw the shape of polygon object." << endl;
+      cout << "3. Show a summary of information of all the polygons." << endl;
+      cin >> option;
+ 
+      if(option == 1){
+         cout << endl;
+         cout << "How many Polygons do you want?" << endl;
+         cin >> num;
+
+         for(i=1;i<=num;i++){
+            cout << endl;
+            cout << "Polygon " << i << ": " << endl;
+            cout << endl;
+            p[i]=new Polygon; 
+            p[i]->input();               
+         }
+      }
+      else if(option == 2){
+         for(i=1;i<=num;i++){ 
+            cout << endl;  
+            cout << "Polygon " << i << ": " << endl;
+            cout << endl;
+            p[i]->drawingPoly();
+         }
+      }
+      else if(option == 3){
+         for(i=1;i<=num;i++){
+            cout << endl;
+            cout << "Polygon " << i << ": " << endl;
+            cout << endl;
+            p[i]->display();
+         }
+      }
+   }while(option == 1 || option == 2 || option == 3);
+}
+torm:~/cisc2000/polygonlabhyanez@storm polygonlab]$ g++ polygon.cpp
+torm:~/cisc2000/polygonlabhyanez@storm polygonlab]$ ./a.out
+Default Constructor: 
+Length: 0
+Width: 0
+Perimeter: 0
+Area: 0
+Min: 10
+Max: 100
+Maximum number of Polygons: 25
+Total Area: 12
+Total Perimeter: 14
+Number of Polygons: 2
+Average Area: 6
+Average Perimeter: 7
+
+Custom Constructor: 
+Length: 3
+Width: 4
+Perimeter: 14
+Area: 12
+Min: 1
+Max: 10
+Maximum number of Polygons: 25
+Total Area: 24
+Total Perimeter: 28
+Number of Polygons: 2
+Average Area: 12
+Average Perimeter: 14
+****
+****
+****
+
+Which option would you like to pick?
+
+1. Build a new polygon object.
+2. Draw the shape of polygon object.
+3. Show a summary of information of all the polygons.
+1
+
+How many Polygons do you want?
+3
+
+Polygon 1: 
+
+
+Input Length:4
+Input Length:13
+Input Width:13
+
+Polygon 2: 
+
+
+Input Length:12
+Input Width:12
+
+Polygon 3: 
+
+
+Input Length:11
+Input Width:10
+
+Which option would you like to pick?
+
+1. Build a new polygon object.
+2. Draw the shape of polygon object.
+3. Show a summary of information of all the polygons.
+2
+
+Polygon 1: 
+
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+
+Polygon 2: 
+
+************
+************
+************
+************
+************
+************
+************
+************
+************
+************
+************
+************
+
+Polygon 3: 
+
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+
+Which option would you like to pick?
+
+1. Build a new polygon object.
+2. Draw the shape of polygon object.
+3. Show a summary of information of all the polygons.
+3
+
+Polygon 1: 
+
+Length: 13
+Width: 13
+Perimeter: 52
+Area: 169
+Min: 10
+Max: 100
+Maximum number of Polygons: 25
+Total Area: 193
+Total Perimeter: 80
+Number of Polygons: 5
+Average Area: 38
+Average Perimeter: 16
+
+Polygon 2: 
+
+Length: 12
+Width: 12
+Perimeter: 48
+Area: 144
+Min: 10
+Max: 100
+Maximum number of Polygons: 25
+Total Area: 337
+Total Perimeter: 128
+Number of Polygons: 5
+Average Area: 67
+Average Perimeter: 25
+
+Polygon 3: 
+
+Length: 11
+Width: 10
+Perimeter: 42
+Area: 110
+Min: 10
+Max: 100
+Maximum number of Polygons: 25
+Total Area: 447
+Total Perimeter: 170
+Number of Polygons: 5
+Average Area: 89
+Average Perimeter: 34
+
+Which option would you like to pick?
+
+1. Build a new polygon object.
+2. Draw the shape of polygon object.
+3. Show a summary of information of all the polygons.
+none
+Destructor
+Destructor

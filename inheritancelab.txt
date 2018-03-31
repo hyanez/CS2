@@ -1,0 +1,506 @@
+//Hugo Yanez
+//May 9, 2017
+//Independent class Customer that contains required information for the sender and recipient
+#ifndef CUSTOMER_H
+#define CUTOMER_H
+
+#include <iostream>
+using namespace std;
+
+class Customer{
+
+   public:
+      //Default Constructor
+      Customer();
+      //Custom Constructor
+      Customer(string, char, string, string, string, string, int);
+  
+      //Methods
+      void inputCustomer();
+      void displayCustomer();
+   
+
+
+   private:
+      char middle;
+      string first, last, address, city, state; 
+      int zip;
+
+
+};
+#endif
+//Hugo Yanez
+//May 9, 2017
+//driver file of class Customer, contains information of the sender and the reciever
+
+#include <string>
+#include "customer.h"
+
+//Default Constructor
+Customer::Customer(){
+
+   middle = ' ';
+   first = last = address = city = state = " ";
+   zip = 0;
+}
+
+//Custom Construtor
+Customer::Customer(string f, char mi, string l, string addr, string c, string s, int code){
+
+   first = f;
+   middle = mi;
+   last = l;
+   address = addr;
+   city = c;
+   state = s;
+   zip = code;
+
+}
+
+void Customer::displayCustomer(){
+   
+   cout << endl;
+   cout << first << " " << middle << " " << last << endl;
+   cout << address << endl;
+   cout << city << ", " << state << " " << zip << endl;
+   cout << endl;
+
+}
+
+void Customer::inputCustomer(){
+
+   cout << "Name: " << endl;
+   cout << "First: ";
+   getline(cin,first);
+   cout << "Middle: ";
+   cin >> middle;
+   cout << "Last: ";
+   getline(cin,last);
+   cout << "Address: ";
+   getline(cin,address);
+   cout << "City: ";  
+   getline(cin,city);
+   cout << "State: ";
+   getline(cin,state);
+   cout << "Zip Code: ";
+   cin >> zip; 
+   cout << endl;
+}
+
+
+/*main(){
+
+
+   Customer c;
+  
+   c.input();
+   c.display();
+
+}*/
+
+//Hugo Yanez
+//May 9, 2017
+//class Package used as a Base Class
+#ifndef PACKAGE_H
+#define PACKAGE_H
+#include "customer.h"
+#include <iostream>
+using namespace std;
+
+class Package{
+
+   public:
+      //Default Constructor
+      Package();
+      //Custom Constructor
+      Package(double, double);
+
+      //Mutator Methods
+      bool setNumber(double); 
+
+      //Methods
+      double calculateCost();
+      void inputPackage();
+      void printPackage();
+  
+      //Accessor Methods
+      Customer getSender();
+      Customer getRecipient();
+   
+      double weight, cost;
+      Customer sender, recipient;
+
+};
+
+#endif
+//Hugo Yanez
+//May 9, 2017
+//Package driver file that contains header file
+
+#include "package.h"
+
+Package::Package(){
+
+   weight = cost = 0;
+
+}
+
+Package::Package(double w, double c){
+
+   weight = w;
+   cost = c;
+
+}
+
+bool Package::setNumber(double num){
+
+   bool valid;
+   if(num > 0)
+      valid = true;
+   else
+      valid = false;
+   return (valid);
+}
+
+double Package::calculateCost(){
+
+   double totalCost = weight * cost;
+   return (totalCost);
+
+}
+
+void Package::inputPackage(){
+   
+   cout << "Enter cost per ounce to ship the package: ";
+   cin >> cost;
+      do{
+         cout << "Invalid number, enter again: ";
+         cin >> cost;
+      }while(setNumber(cost) == false);
+   cout << "Enter weight of the package(in ounces): ";
+   cin >> weight;
+      do{
+         cout << "Invalid number, enter again: ";
+         cin >> weight;
+      }while(setNumber(weight) == false);
+   cout << "Enter Sender Information: " << endl;
+   sender.inputCustomer();
+   cout << "Enter Recipient Information: " << endl;
+   recipient.inputCustomer();
+
+}
+
+void Package::printPackage(){
+   
+   cout << "Weight of the packages( in ounces): " << weight << endl;
+   cout << "Cost per ounce to ship the package: " << cost << endl;
+   cout << "Total Cost: " << calculateCost();
+   cout << endl;
+   cout << "Sender Information: " << endl;
+   sender.displayCustomer();
+   cout << "Recipient Information: " << endl;
+   recipient.displayCustomer();
+
+
+}
+
+/*main(){
+
+   Package A;
+  
+   A.input();
+   A.print();
+
+}*/
+
+//Hugo Yanez
+//May 15, 2017
+//Header file of the class OverNightPackage
+#ifndef OVERNIGHT_H
+#define OVERNIGHT_H
+
+#include "package.h"
+
+class OverNightPackage : public Package { 
+
+   public:
+      //Default Constructor
+      OverNightPackage();
+      //Custom Constructor
+      OverNightPackage(double, double, double);
+      
+      double calculateOverNightCost();
+      void inputOverNight();
+      void printOverNight(); 
+
+   private:
+      double addFee;
+
+
+};
+
+#endif
+//Hugo Yanez
+//May 15, 2017
+//Implementation of inheritance on the derived class OverNightPackage from the base class Package
+
+#include "overnight.h"
+
+OverNightPackage::OverNightPackage():Package(){
+   addFee = 0;
+
+}
+
+OverNightPackage::OverNightPackage(double fee, double W, double C):Package(weight, cost){
+   addFee = fee;
+}
+
+double OverNightPackage::calculateOverNightCost(){
+   double OverNightCost = (weight*addFee) + calculateCost();
+   
+   return (OverNightCost);
+}
+
+void OverNightPackage::inputOverNight(){
+   inputPackage();
+   cout << "Enter additional fee per ounce: ";
+   cin >> addFee;
+
+}
+
+void OverNightPackage::printOverNight(){
+
+   cout << "Additional fee per ounce charged for overnight shipping: " << addFee << endl;
+   printPackage();
+   cout << "Total Cost including additional fee: " << calculateOverNightCost(); 
+   cout << endl;
+}
+
+/*main(){
+
+   OverNightPackage B;
+   B.inputOverNight();
+   B.printOverNight();
+
+
+}*/
+//Hugo Yanez
+//May 15, 2017
+//Header file of derived class TwoDayPackage
+
+#ifndef TWODAY_H
+#define TWODAY_H
+   
+#include "package.h"
+
+class TwoDayPackage: public Package{
+   public:
+      //Default Constructor
+      TwoDayPackage();
+      //Custom Constructor
+      TwoDayPackage(double, double, double);
+ 
+      double calculateTwoDayPackage();
+      void inputTwoDayPackage();
+      void printTwoDayPackage();
+ 
+   private:
+      double flatFee; 
+};
+ 
+#endif
+//Hugo Yanez
+//May 15, 2017
+//Header file of derived class TwoDay 
+
+#include "twoday.h"
+
+//Default Constructor
+TwoDayPackage::TwoDayPackage():Package(){
+   flatFee = 0;
+
+}
+
+//Custom Constructor
+TwoDayPackage::TwoDayPackage(double flat, double W, double C):Package(weight, cost){
+   flatFee = flat;
+
+}
+
+void TwoDayPackage::inputTwoDayPackage(){
+   inputPackage();
+   cout << "Enter flat fee of two day shipping: ";
+   cin >> flatFee;
+
+}
+void TwoDayPackage::printTwoDayPackage(){
+   cout << "Flat fee of two day shipping: " << flatFee << endl;
+   printPackage();
+   cout << "Total cost including Flat Fee: " << calculateTwoDayPackage();
+   cout << endl;
+}
+
+double TwoDayPackage::calculateTwoDayPackage(){
+   double TwoDayCost = flatFee + calculateCost();
+  
+   return (TwoDayCost);
+
+}
+
+/*main(){
+   TwoDayPackage C;
+   C.inputTwoDayPackage();
+   C.printTwoDayPackage();
+
+
+
+}*/
+
+//Hugo Yanez
+//May 15, 2017
+//driver that contains objects of classes Package, OverNightPackage and TwoDayPackage
+
+#include "package.h"
+#include "overnight.h"
+#include "twoday.h"
+
+main(){
+
+   cout << "PACKAGE: " << endl;
+   cout << endl;
+   Package A;
+   A.inputPackage();
+   A.printPackage();
+
+   cout << "OVERNIGHT PACKAGE: " << endl;
+   cout << endl;
+   OverNightPackage B;
+   B.inputOverNight();
+   B.printOverNight();
+   
+   cout << "TWO DAY PACKAGE: " << endl;
+   cout << endl;
+   TwoDayPackage C;
+   C.inputTwoDayPackage();
+   C.printTwoDayPackage();
+
+}
+torm:~/cisc2000/inheritancehyanez@storm inheritance]$ g++ver.cpp customer.cpp package.cpp twoday.cpp overnight.cpp
+ torm:~/cisc2000/inheritancehyanez@storm inheritance]$ ./a.out
+PACKAGE: 
+
+Enter cost per ounce to ship the package: 5
+Invalid number, enter again: 5
+Enter weight of the package(in ounces): 10
+Invalid number, enter again: 10
+Enter Sender Information: 
+Name: 
+First: Middle: Hugo D Yanez
+Last: Address: 87 Pengilly Drive
+City: New Rochelle
+State: New York
+Zip Code: 10804
+
+Enter Recipient Information: 
+Name: 
+First: Middle: Freddy Caione
+Last: Address: 441 E Fordham Road
+City: Bronx
+State: New York
+Zip Code: 10458
+
+Weight of the packages( in ounces): 10
+Cost per ounce to ship the package: 5
+Total Cost: 50
+Sender Information: 
+
+ H ugo D Yanez
+87 Pengilly Drive
+New Rochelle, New York 10804
+
+Recipient Information: 
+
+ F reddy Caione
+441 E Fordham Road
+Bronx, New York 10458
+
+OVERNIGHT PACKAGE: 
+
+Enter cost per ounce to ship the package: 5
+Invalid number, enter again: 5
+Enter weight of the package(in ounces): 10
+Invalid number, enter again: 10
+Enter Sender Information: 
+Name: 
+First: Middle: Hugo D Yanez
+Last: Address: 87 Pengilly Drive
+City: New Rochelle
+State: New York
+Zip Code: 10804
+
+Enter Recipient Information: 
+Name: 
+First: Middle: Freddy Caione
+Last: Address: 441 E fordham road
+City: Bronx
+State: New York
+Zip Code: 10458
+
+Enter additional fee per ounce: 2.50
+Additional fee per ounce charged for overnight shipping: 2.5
+Weight of the packages( in ounces): 10
+Cost per ounce to ship the package: 5
+Total Cost: 50
+Sender Information: 
+
+ H ugo D Yanez
+87 Pengilly Drive
+New Rochelle, New York 10804
+
+Recipient Information: 
+
+ F reddy Caione
+441 E fordham road
+Bronx, New York 10458
+
+Total Cost including additional fee: 75
+TWO DAY PACKAGE: 
+
+Enter cost per ounce to ship the package: 5
+Invalid number, enter again: 5
+Enter weight of the package(in ounces): 10
+Invalid number, enter again: 10
+Enter Sender Information: 
+Name: 
+First: Middle: Hugo D Yanez
+Last: Address: 87 Pengilly Drive
+City: New Rochelle
+State: New York
+Zip Code: 10804
+
+Enter Recipient Information: 
+Name: 
+First: Middle: Freddy Caione
+Last: Address: 441 E Fordham Road
+City: Bronx New York
+State: 10458
+Zip Code: 10458
+
+Enter flat fee of two day shipping: 7.89
+Flat fee of two day shipping: 7.89
+Weight of the packages( in ounces): 10
+Cost per ounce to ship the package: 5
+Total Cost: 50
+Sender Information: 
+
+ H ugo D Yanez
+87 Pengilly Drive
+New Rochelle, New York 10804
+
+Recipient Information: 
+
+ F reddy Caione
+441 E Fordham Road
+Bronx New York, 10458 10458
+
+Total cost including Flat Fee: 57.89
