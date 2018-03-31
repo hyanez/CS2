@@ -1,0 +1,166 @@
+//Hugo Yanez
+//Jan. 25, 2016
+//Program that swaps the value of a code
+
+#include <iostream>
+using namespace std;
+
+//Declare swap function
+void swap(int&, int&);
+void display(int[], int[], int);
+void swap(int[], int[], int);
+void initialize(int[], int, int[], int);
+void display (int[],int);
+
+
+int main()
+{
+    //Declare two variables
+    int i, var1, var2;
+    const int size = 9;
+    int X[size] = {2, 4, 6, 8, 10, 12, 14, 16, 18};
+    int Y[size] = {1, 3, 5, 7, 9, 11, 13, 15, 17};
+    const int length = 16;
+    int Narr[length];
+    
+
+    //Prompt user to enter input
+    cout << "Enter two variables : ";
+    cin >> var1 >> var2;
+    
+    //Display the valus of the variable
+    cout << "X = " << var1 << " " << "Y = " << var2 << endl;
+    cout << "AFTER SWAP: " << endl;
+    
+    //Call swap function
+    swap(var1, var2);
+    cout << "X = " << var1 << " " << " Y = " << var2 << endl;  
+    
+    //Call display function and swap array
+    cout << "PART A:" << endl;
+    cout << "Initial display of the two arrays " << endl;
+    cout << " " << endl;
+    display(X, Y, size);
+    cout << " " << endl;
+    cout << "After call to swap " << endl;
+    cout << " " << endl;
+    swap(X, Y, size);
+    cout << " " << endl;
+    // Initializing a new array using intitialize function
+    cout << "PART B:" << endl;
+    cout << " " << endl;
+    cout << "After initializing a larger array from odd numbered array" << endl;
+    cout << " " << endl;
+    initialize(Narr, length, X, size);
+    display(Narr, length);
+
+}
+
+//This function swaps two integers when initialized to two variables
+void swap(int&x, int&y)
+{
+    int temp = x;
+    x = y;
+    y = temp;
+
+}
+
+//This funcion displays the contents of each of the two single dimensional arrays
+void display(int a[], int b[], int len)
+{
+   
+    for(int i=0;i<len;i++)
+       cout << a[i] << " " << b[i] <<endl;
+   
+
+}
+
+//This function displays the contents of one single dimensional array
+void display(int a[], int len)
+{
+    for(int i=0;i<len;i++)
+       cout << a[i] <<endl;
+}
+
+//This function swaps all odd positioned elements of the array
+void swap(int a[], int b[], int len)
+{
+    for(int i=0;i<len;i++)
+    {
+        if(i%2 != 0)
+        {
+           swap(a[i], b[i]);
+        }
+        cout << a[i] << " " << b[i] << endl;
+    }
+
+}
+
+//This function initializes the 3rd array to one of the original arrays
+void initialize(int a[], int asize, int b[], int bsize)
+{
+    bool reverse = false;
+    for(int i=0;i<asize;i++)
+    {
+       if(!reverse)
+           a[i] = b[i% bsize];
+       else 
+           a[i] = b[(bsize -1)-(i%bsize)];
+       if(i%bsize == bsize-1 && !reverse)
+           reverse = true;
+       else if(i%bsize == bsize-1 && reverse)
+           reverse = false;
+    }
+} 
+
+torm:~/cisc2000/wk1hyanez@storm wk1]$ g++ swaplab.cpp
+torm:~/cisc2000/wk1hyanez@storm wk1]$ ./a.out
+Enter two variables : 4 5
+X = 4 Y = 5
+AFTER SWAP: 
+X = 5  Y = 4
+PART A:
+Initial display of the two arrays 
+ 
+2 1
+4 3
+6 5
+8 7
+10 9
+12 11
+14 13
+16 15
+18 17
+ 
+After call to swap 
+ 
+2 1
+3 4
+6 5
+7 8
+10 9
+11 12
+14 13
+15 16
+18 17
+ 
+PART B:
+ 
+After initializing a larger array from odd numbered array
+ 
+2
+3
+6
+7
+10
+11
+14
+15
+18
+18
+15
+14
+11
+10
+7
+6
