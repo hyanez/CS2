@@ -1,0 +1,457 @@
+/*  Script file that contains methods, constructors, operator overloading,
+ *  header file, main file, etc of the set class.
+ */
+
+
+Script started on Fri 28 Apr 2017 09:43:05 AM EDT
+storm:~/cisc2000/setlabhyanez@storm setlab]$ pwd
+/home/students/hyanez/cisc2000/setlab
+storm:~/cisc2000/setlabhyanez@storm setlab]$ cat set.h set.cpp
+//Hugo Yanez
+//April 8, 2017
+//Set class that contains methods, constructors, operator overloading
+
+#include <iostream>
+using namespace std;
+
+class Set{
+   friend istream &operator>>(istream &, Set &);
+   friend ostream &operator<<(ostream &, const Set &);  
+   
+   public:
+
+      //Default Constructor
+      Set(int = DEFAULT_SIZE);
+      //Custom Constructor
+      Set(int [], int, char);
+      //Copy Constructor
+      Set( const Set &);
+      //Destructor
+      ~Set();
+
+      //Operator Methods
+      const Set &operator=(const Set &);
+
+      bool operator==(const Set &)const;
+      bool operator!=(const Set &)const;
+      
+      Set operator+(const Set &);
+      Set operator-(const Set &);
+      Set operator^(const Set &);
+      
+      //Methods
+      bool add(int);
+      bool remove(int);
+
+      //Mutator Methods
+      bool setElement(int);
+   
+      //Accessor Methods
+      int getNumElements();
+
+
+
+
+
+   private:
+      int *set;
+      int pSize;
+      int numElements;
+      char name;
+      static const int LIMIT = -100;
+      static const int INCREASE_SIZE = 1;
+      static const int DECREASE_SIZE = 1;
+      static const int DEFAULT_SIZE = 0;
+      
+      //Private Methods
+      void display( ostream & ) const;
+      void input( istream & );
+};
+//Hugo Yanez
+//April 19, 2017
+//Implementation of Set Class
+
+#include "set.h"
+//operator overload of input for class Set
+istream &operator>>(istream & cin, Set & S){
+   S.input(cin);
+
+   return cin;
+}
+
+//operator overload of output for class Set
+ostream &operator<<(ostream & output, const Set & S){
+
+   S.display(output);    
+
+   return output;
+}
+
+//Default Constructor
+Set::Set(int size){
+   pSize = numElements = 0; 
+   set = NULL;
+   int i;
+   
+   if(size >= 0 ){
+      pSize = size;
+      set = new int[pSize];
+      for(i = 0; i < pSize; i++){
+        set[i]={0};
+      } 
+   } else {
+      cout << "Invalid entry !" << endl;
+   }
+}
+
+//Custom Constructor
+Set::Set(int s[], int size, char nm){
+   pSize = size;
+   set = new int[pSize];
+   name = nm;
+   numElements = 0;
+  
+   for(int i = 0; i < pSize; i++){
+      set[i] = s[i]; 
+      if(s[i]!=0){
+         numElements++;
+      }
+      
+   }
+}
+
+//Copy Constructor
+Set::Set(const Set & S): Set(){
+   *this = S;
+
+}
+
+//Destructor
+Set::~Set(){
+   if( set )
+      delete [] set;
+   set = NULL;
+
+}
+
+//Mutator Method
+bool Set::setElement(int e){
+
+   bool valid = false;
+   
+   for(int i=0; i < pSize;i++){
+      if(set[i] == e){
+         valid = true;
+      }
+   }
+
+   return valid;
+}
+
+//Private Methods
+void Set::display(ostream & output)const{
+
+   int i;
+   
+   cout << "Physical size is: " << pSize << endl;
+   cout << "Number of elements in the array is: " << numElements << endl;
+  
+   cout << "Set " << name << " : { ";
+   for(i=0;i<numElements;i++){ 
+      output<< set[i];
+      if(i!=numElements-1)
+         output << ", ";
+   
+   }
+   cout << " }";
+   cout << endl;
+
+
+}
+
+void Set::input(istream & cin){
+   int element;
+   cout << "Enter elements to store in the array(if you wish to stop, type in -100): ";
+   do{
+            cin >> element;
+            while(setElement(element)){
+               cout << "Number exists already, enter again: ";
+               cin >> element;
+           }
+            
+   }while(add(element));
+
+
+}
+
+//Operator Methods
+bool Set::operator== (const Set & S)const{
+   bool equality = false;
+   
+   if(numElements == S.numElements){
+      for(int i=0; i<numElements;i++){
+         if(set[i] != S.set[i]){
+            equality = true;
+            break;
+         }
+      }
+   }
+   
+   return equality;
+}
+
+bool Set::operator!=(const Set &S)const{
+
+   return !( *this == S);
+}
+
+const Set &Set::operator=(const Set & S){
+
+
+   if(&S != this){
+      numElements = 0;
+ 
+      for(int i=0;i<S.numElements;i++)
+         add(S.set[i]);
+   }
+
+   return *this;
+}
+
+Set Set::operator+(const Set & S){
+ 
+   Set C = *this;
+
+   for(int i=0; i < S.numElements; i++)
+            C.add(S.set[i]);
+      
+
+   return C;
+
+}
+
+Set Set::operator^(const Set & S){
+
+   Set C;
+
+   for(int i=0;i<S.numElements;i++){
+      if(setElement(S.set[i]))
+         C.add(S.set[i]);
+   }
+
+   return C;
+
+}
+
+Set Set::operator-(const Set & S){
+
+   Set C;
+   
+   for(int i=0; i<S.numElements;i++)
+         if(!setElement(S.set[i]))
+            C.add(S.set[i]);
+
+   return C;
+}
+
+
+//Method that adds each element to the array
+bool Set::add( int element ){
+   bool addElement = false;
+ 
+   if( setElement( element ) == false && element != LIMIT){
+
+      if( numElements == pSize ) {
+         pSize += INCREASE_SIZE;
+         int *new_set = new int [pSize];
+
+         if( !new_set ){
+            cerr << "Error: Failure. Exiting Program!" << endl;
+            pSize = 0;
+            exit(1);
+         }
+         if( set ){
+            for(int i=0; i < numElements; i++)
+               new_set[i] = set[i];
+            
+            delete [] set;
+            set = NULL;
+         }
+         
+         set = new_set;
+      }  
+      
+      set[ numElements ++ ] = element; 
+      
+      addElement = true;
+   }
+
+   return( addElement );
+
+}
+
+bool Set::remove( int element ){
+
+   bool removeElement = false;
+   
+   if(setElement(element) == true && element != LIMIT){
+      if(numElements == pSize){
+         pSize -= DECREASE_SIZE;
+         int *new_set = new int [pSize];
+          
+         if(set){
+            for(int i=0;i<numElements;i++)
+               new_set[i]=set[i];
+            
+            delete [] set;
+            set = NULL;
+         }
+         
+         set = new_set;
+      }
+      set [numElements--] = element;
+ 
+      removeElement = true;
+   }
+   
+   return (removeElement);
+}
+
+main(){
+ 
+   //Create two arrays of integers
+   int a[3] = {1, 2, 3};
+   int b[3] = {3, 4, 5};
+   
+   //Instantiate two sets A, B
+   Set A(a, 3, 'A');
+   Set B(b, 3, 'B');
+   cout << A;
+   cout << endl;
+   cout << B;
+   cout << endl;   
+
+   //Declare a set C using the default constructor the input elements into the set from external user input
+   Set C;
+   cin >> C;
+   cout << C;
+   cout << endl;
+   
+   //Create a new set D from one of the above sets
+   Set D = A;
+   cout << D;
+   cout << endl;
+   
+   //Add new element from one of the existing sets
+   A + A.add(4); 
+   cout << A;
+   cout << endl;
+   //Remove element from one of the existing sets
+   B - B.remove(5);
+   cout << B;
+   cout << endl;
+  
+   //Set operations
+   cout << "UNION:" << endl;
+   Set E=(A+B);
+   cout << E;
+   cout << endl;
+
+   cout << "INTERSECTION: " << endl;
+   Set F = A^B;
+   cout << F;
+   cout << endl;
+
+   cout << "DIFFERENCE: " << endl;
+   Set G =C-B;
+   cout << G;
+   
+   cout << "EQUALITY/INEQUALITY: " << endl;
+   if(A == B)
+     cout << "Sets A and B are equal." << endl;  
+   else if(A != B)
+     cout << "Sets A and B are NOT equal." << endl;    
+
+}
+torm:~/cisc2000/setlabhyanez@storm setlab]$ g++ set.cpp
+torm:~/cisc2000/setlabhyanez@storm setlab]$ ./a.out
+Physical size is: 3
+Number of elements in the array is: 3
+Set A : { 1, 2, 3 }
+
+Physical size is: 3
+Number of elements in the array is: 3
+Set B : { 3, 4, 5 }
+
+Enter elements to store in the array(if you wish to stop, type in -100): 4
+5
+6
+7
+-100
+Physical size is: 4
+Number of elements in the array is: 4
+Set @ : { 4, 5, 6, 7 }
+
+Physical size is: 3
+Number of elements in the array is: 3
+Set ˇ : { 1, 2, 3 }
+
+Physical size is: 4
+Number of elements in the array is: 4
+Set A : { 1, 2, 3, 4 }
+
+Physical size is: 2
+Number of elements in the array is: 2
+Set B : { 3, 4 }
+
+UNION:
+Physical size is: 4
+Number of elements in the array is: 4
+Set torm:~/cisc2000/setlabhyanez@storm setlab]$ g++ set.cpp
+NTERSECTION: 
+Physical size is: 2
+Number of elements in the array is: 2
+Set torm:~/cisc2000/setlabhyanez@storm setlab]$ ./a.out
+Physical size is: 3
+Number of elements in the array is: 3
+Set A : { 1, 2, 3 }
+
+Physical size is: 3
+Number of elements in the array is: 3
+Set B : { 3, 4, 5 }
+
+Enter elements to store in the array(if you wish to stop, type in -100): 4
+5
+6
+7
+-100
+Physical size is: 4
+Number of elements in the array is: 4
+Set @ : { 4, 5, 6, 7 }
+
+Physical size is: 3
+Number of elements in the array is: 3
+Set ˇ : { 1, 2, 3 }
+
+Physical size is: 4
+Number of elements in the array is: 4
+Set A : { 1, 2, 3, 4 }
+
+Physical size is: 2
+Number of elements in the array is: 2
+Set B : { 3, 4 }
+
+UNION:
+Physical size is: 4
+Number of elements in the array is: 4
+Set torm:~/cisc2000/setlabhyanez@storm setlab]$ g++ set.cpp
+FFERENCE: 
+Physical size is: 1
+Number of elements in the array is: 1
+Set ˇ : { 3 }
+EQUALITY/INEQUALITY: 
+Sets A and B are NOT equal.
+torm:~/cisc2000/setlabhyanez@storm setlab]$ exit
+exit
+
+Script done on Fri 28 Apr 2017 09:43:51 AM EDT
