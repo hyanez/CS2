@@ -1,0 +1,352 @@
+/*  Set lab that includes header file, implementation of set class
+ *  using operator overloading and templates.
+ */
+//Hugo Yanez
+//April 19, 2017
+//Implementation of Set Class
+
+#include "set.h"
+//operator overload of input for class Set
+istream &operator>>(istream & cin, Set & S){
+   S.input(cin);
+
+   return cin;
+}
+
+//operator overload of output for class Set
+ostream &operator<<(ostream & output, const Set & S){
+
+   S.display(output);    
+
+   return output;
+}
+Set operator+(const Set & S){
+
+   
+   return(S.unionof(*this));
+
+}
+
+
+//Default Constructor
+Set::Set(int size){
+   pSize = numElements = 0;
+   set = NULL;
+   int i;
+   
+   if(size >= 0 ){
+      pSize = size;
+      set = new int[pSize];
+      for(i = 0; i < pSize; i++){
+        set[i]={0};
+        cout << set[i] << endl;
+      } 
+   } else {
+      cout << "Invalid entry !" << endl;
+   }
+}
+
+//Custom Constructor
+Set::Set(int s[], int size, char nm){
+   pSize = size;
+   set = new int[pSize];
+   name = nm;
+   numElements = 0;
+  
+   cout << "Array: " << endl;
+   for(int i = 0; i < pSize; i++){
+      set[i] = s[i]; // add( s[i] )
+      if(s[i]!=0){
+         numElements++;
+      }
+      cout << set[i] << endl;
+      
+   }
+   cout << "Size of array: " << pSize << endl;
+   cout << "Name of array: " << name << endl;
+}
+
+//Copy Constructor
+Set::Set(const Set & S){
+   *this = S;
+
+}
+
+//Destructor
+Set::~Set(){
+   if( set )
+      delete [] set;
+   set = NULL;
+
+}
+
+//Mutator Methods
+bool Set::setElement(int e){
+
+   bool valid = false;
+   
+   for(int i=0; i < pSize;i++){
+      if(set[i] == e){
+         valid = true;
+      }
+   }
+
+   return valid;
+}
+
+//Private Methods
+void Set::display(ostream & output)const{
+
+   int i;
+   
+   cout << "Physical size is: " << pSize << endl;
+   cout << "Number of elements in the array is: " << numElements << endl;
+  
+   cout << "{ ";
+   for(i=0;i<pSize;i++){ 
+      output<< set[i] << ", ";
+   
+   }
+   cout << "}";
+   cout << endl;
+
+
+}
+
+void Set::input(istream & cin){
+   int element;
+   cout << "Enter elements to store in the array(if you wish to stop, type in -100): ";
+   do{
+            cin >> element;
+            while(setElement(element)){
+               cout << "Number exists already, enter again: ";
+               cin >> element;
+           }
+            
+   }while(add(element));
+
+
+}
+
+Set Set::unionof(const Set & B){
+   
+   int i;
+
+   Set C = *this;
+   
+   for(i=0; i < C.pSize; i++){
+      for(i=0;i<B.pSize;i++){
+         if(!setElement(C[i])
+            C.add(B[i]);
+      }
+    }
+
+    return (C);
+}
+
+bool Set::add( int element ){
+   bool addElement = false;
+ 
+   if( element != LIMIT ){
+
+      if( numElements == pSize ) {
+         pSize += INCREASE_SIZE;
+         int *new_set = new int [pSize];
+
+         if( !new_set ){
+            cerr << "Error: Failure. Exiting Program!" << endl;
+            pSize = 0;
+            exit(1);
+         }
+         if( set ){
+            for(int i=0; i < numElements; i++)
+               new_set[i] = set[i];
+            
+            delete [] set;
+            set = NULL;
+         }
+         
+         set = new_set;
+      }  
+      
+      set[ numElements ++ ] = element; 
+      
+      addElement = true;
+   }
+
+   return( addElement );
+
+}
+
+main(){
+   cout << "SET A" << endl;
+   Set A(-5);
+   cout << endl;
+
+   cout << "SET B"<< endl;
+   int b[3]={1,2,3};
+   Set B (b, 5, 'B');
+   cout << endl;
+
+   cout << "SET C" << endl;
+   Set C(5);
+   cin >> C;
+   cout << C;
+   
+   Set D(B + C);
+   
+
+}
+//Hugo Yanez
+//April 8, 2017
+//Set class that contains methods, constructors, operator overloading
+
+#include <iostream>
+using namespace std;
+
+class Set{
+   friend istream &operator>>(istream &, Set &);
+   friend ostream &operator<<(ostream &, const Set &);  
+   friend Set operator+(const Set &);
+
+
+
+
+
+   
+   public:
+
+      //Default Constructor
+      Set(int = DEFAULT_SIZE);
+      //Custom Constructor
+      Set(int [], int, char);
+      //Copy Constructor
+      Set( const Set &);
+      //Destructor
+      ~Set();
+      //Mutator Method
+      bool setElement(int);
+      //Methods
+      bool add (int);
+      /*union( Set );
+      intersection( Set );
+      difference( Set );
+      equality( Set );
+      inequality( Set );
+      */
+      //Mutator Methods
+      
+   
+      //Accessor Methods
+      int getNumElements();
+
+
+
+
+
+   private:
+      int *set;
+      int pSize;
+      int numElements;
+      char name;
+      static const int LIMIT = -100;
+      static const int INCREASE_SIZE = 1;
+      static const int DEFAULT_SIZE = 0;
+      
+      //Private Methods
+      void display( ostream & ) const;
+      void input( istream & );
+      Set unionof(const Set & );
+};
+
+//Hugo Yanez
+//May 5, 2017
+//Implementation of Set class using templates
+#include "set.h"
+
+template <typename X>
+void test(X a[], X b[], int size){
+ 
+    X element;
+    //Instantiate two sets A, B
+    Set<X> A(a, 3, 'A');
+    Set<X> B(b, 3, 'B');
+    cout << A;
+    cout << endl;
+    cout << B;
+    cout << endl;
+ 
+    //Declare a set C using the default constructor the input elements into the set from external user input
+    Set<X> C('C');
+    cin >> C;
+    cout << C;
+    cout << endl;
+ 
+    //Create a new set D from one of the above sets
+    Set<X> D('D'); 
+    D = A;
+    cout << D;
+    cout << endl;
+ 
+    //Add new element from one of the existing sets
+    cout << "What element do you want to add? ";
+    cin >> element;
+    A + A.add(element);
+    cout << A;
+    cout << endl;
+    //Remove element from one of the existing sets
+    cout << "What element do you want to remove? ";
+    cin >> element;
+    B - B.remove(element);
+    cout << B;
+    cout << endl;
+ 
+    //Set operations
+    cout << "UNION:" << endl;
+    Set<X> E('E');
+    E =(A+B);
+    cout << E;
+    cout << endl;
+ 
+    cout << "INTERSECTION: " << endl;
+    Set<X> F('F'); 
+    F = A^B;
+    cout << F;
+    cout << endl;
+ 
+    cout << "DIFFERENCE: " << endl;
+    Set<X> G('G'); 
+    G = C-B;
+    cout << G;
+ 
+    cout << "EQUALITY/INEQUALITY: " << endl;
+    if(A == B)
+      cout << "Sets A and B are equal." << endl;
+    else if(A != B)
+      cout << "Sets A and B are NOT equal." << endl;
+}  
+
+main(){
+ 
+     const int size = 3;
+ 
+     //instantiate a set of integers
+     int a[size]={2,3,4};
+     int b[size]={5, 6, 7};
+     test(a, b, size);
+ 
+     //instantiate a set of chars
+     char c[size] = {'A', 'B', 'C'};
+     char d[size] = {'D', 'E', 'F'};
+     test(c, d, size);
+ 
+     //instantiate a set of strings
+     string e[size] = {"I am", "very", "hungry"};
+     string f[size] = {"Are", "you", "hungry?"};
+     test(e, f, size);
+ 
+     //instantiate a set of doubles
+     double g[size] = {1.5, 3.0, 4.5};
+     double h[size] = {6.0, 4.5, 7.0};
+     test(g, h, size);
+ }  
