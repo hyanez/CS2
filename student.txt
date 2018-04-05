@@ -1,0 +1,1113 @@
+/*  Script file containing a program that displays information of a 
+ *  Fordham University student using constructors, objects, etc.
+ */ 
+
+Script started on Tue 07 Mar 2017 09:53:26 AM EST
+torm:~/cisc2000/classeshyanez@storm classes]$ pwd
+/home/students/hyanez/cisc2000/classes
+torm:~/cisc2000/classeshyanez@storm classes]$ cat name.h namtorm:~/cisc2000/classeshyanez@storm classes]$ cat name.h nam.cp.cp...as..
+ne.h phone.cpp student.h student.cpp
+//Hugo Yanez
+//Feb. 28, 2017
+//Name header file
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Name{
+
+   public:
+      //Constructors
+      Name();//Default Constructor
+      Name(string, char, string);//Customized Constructor that takes in three arguments
+
+      //Methods
+      void inputName();
+      void displayName();
+      
+      //Mutator Methods
+      void setFirst(string);
+      void setMiddle(char);
+      void setLast(string);
+      void setName(string, char, string); 
+              
+      //Accessor Methods
+      string getFirst();
+      char getMiddle();
+      string getLast();
+      
+
+   private:
+      string first, last;
+      char middle; 
+
+
+};
+//Hugo Yanez
+//Feb. 28, 2017
+//Name .cpp file
+
+#include "name.h"
+#include <string>
+#include <iostream>
+using namespace std;
+
+//Default Constructor
+Name::Name(){
+  
+   first = last = "Unknown";
+   middle = '?';
+
+}
+
+//Custom Constructor
+Name::Name(string f, char mi, string l){
+
+   first = f;
+   middle = mi;
+   last = l;
+
+}
+
+//Mutator Methods
+void Name::setFirst(string f){
+   first = f;
+
+}
+
+void Name:: setMiddle(char m){
+   middle = m;
+
+}
+
+void Name::setLast(string l){
+   last = l;
+
+}
+
+void Name::setName(string f, char m, string l){
+   first = f;
+   middle = m;
+   last = l;
+}
+
+//Input method that accepts external user input of each data member
+void Name::inputName(){
+   cout << endl;
+   cout << "Enter first name: ";
+   cin >> first;
+   
+   cout << "Enter middle initial: ";
+   cin >> middle;
+  
+   cout <<"Enter last name: ";
+   cin >> last;
+ 
+}
+
+//Display method that displays all the data members
+void Name::displayName(){
+   cout << first << " " << middle << " " << last << endl;
+}
+
+//Accessor Methods
+string Name::getFirst(){
+
+   return( first );
+}
+
+char Name::getMiddle(){
+
+   return( middle );
+}
+
+string Name::getLast(){
+
+   return( last );
+}
+
+
+/*
+main(){
+   Name s1, s2("Hugo", 'D', "Yanez");
+   string first, last;   
+
+   cout << "Name created using default constructor is: ";
+   s1.display();
+  
+   cout << "Name created using custom constructor is: ";
+   s2.display();
+
+   cout <<"Update the object created by default constructor:";
+   s1.inputName();
+   cout << endl;
+   
+   cout << "Updated object is: ";
+   s1.display();
+
+   cout <<"Enter a new First Name: ";
+   cin >> first;
+   cout <<"Enter a new Last Name: ";
+   cin>> last;
+   s1.setFirst(first);
+   s1.setLast(last);
+   cout << endl;   
+
+   cout << "Updated name is: ";
+   s1.display();
+
+   cout <<"Custom name is :";
+   s2.display();
+}
+
+*/
+//Hugo Yanez
+//Feb. 15, 2017
+//Program that uses classes to save and output information.
+
+#include <iostream>
+using namespace std;
+
+class Date{
+   public:
+      //Constructors
+      Date();  // Default Constructor
+      Date(int, int, int); //Customized Constructor
+      Date(int, int);
+         
+      
+      //Mutator Methods
+      bool setMonth(int);
+      bool setDay(int);
+      bool setYear(int);
+      bool setDate(int, int, int);
+
+      //Method to display the contents of the data members
+      void displayDate();
+
+      //Method to populate external user input
+      void inputDate();
+           
+      //Accessor Methods
+      int getMonth();
+      int getDay();
+      int getYear();
+     
+
+
+
+
+   private:
+   int month, day, year;
+
+
+
+};
+//Hugo Yanez
+//Feb. 15, 2017
+//Program that uses classes to save and output information.
+
+#include "date.h"
+
+//Default Constructor
+Date::Date(){
+   month = day = year = 0;
+}
+
+//Customized Constructor
+Date::Date(int m, int d, int y){
+   month = m;
+   day = d;
+   year = y;
+}
+//Customized Constructor
+Date::Date(int m, int y){
+   month = m;
+   year = y;
+}
+
+//Mutator Methods
+bool Date::setMonth(int m){
+   bool valid = false;
+   if(m>0 && m <= 12){
+      month = m;
+      valid = true;
+   }
+   return(valid);
+}
+
+bool Date::setDay(int d){
+   bool valid = false;
+   if(d>0 && d<=31){
+      day = d;
+      valid = true;
+   }
+   return(valid);
+}
+
+bool Date::setYear(int y){
+    bool valid = false;
+    if(y > 0){
+       year = y;
+       valid = true;
+    }
+    return(valid);
+}
+
+bool Date::setDate(int m, int d, int y){
+    return (setMonth(m) && setDay(d) && setYear(y));
+}
+//Method that allows for external user input
+void Date::inputDate(){
+   int m, d = 0;
+   cout << endl;
+   do{
+      if(!m)
+        cout <<"Enter month: ";
+      else
+        cout<< m <<" is not a valid month, enter again: ";
+      cin >> m;
+   }while(!setMonth(m));
+  
+   do{
+      if(!d)
+         cout<<"Enter day: ";
+      else
+         cout << d << " is not a valid, enter again: ";
+      cin >> d;
+   }while(!setDay(d));
+   
+   cout <<"Enter year: "; 
+   cin >>  year;
+   
+}
+
+//Method that displays the data members
+void Date:: displayDate(){
+   cout << month << "/"
+        << day << "/"
+        << year << endl;
+}
+
+//Accessor Methods
+
+int Date::getMonth(){
+
+   return(month);
+}
+
+int Date::getDay(){
+
+   return(day);
+}
+
+int Date::getYear(){
+
+   return(year);
+}
+/*
+int main (){
+  
+   Date d, bday(6, 26, 1997);
+   int month;
+   
+   cout <<"Date created using default construcor is: ";
+   d.displayDate();
+
+   cout <<"Date created using custom constructor is: ";
+   bday.displayDate();
+  
+   cout << "Update the object created by default constructor: ";
+   d.inputDate();
+   cout << endl;
+   
+   cout <<"Updated object is: ";
+   d.displayDate();
+   cout << endl;
+
+   cout <<"Enter a new month : ";
+   cin >> month;
+  
+   if(d.setMonth(month))
+      cout << "Accepted"<< endl;
+   else
+      cout << "Rejected"<< endl;
+   cout << endl;
+
+   cout << "Updated date is: ";
+   d.displayDate();
+    
+   cout << "Custome date is: ";
+   bday.displayDate();
+
+}
+*/
+
+//Hugo Yanez
+//Program header file
+//Feb. 28, 2017
+
+#include <iostream>
+using namespace std;
+
+class Program{
+   public:
+
+      //Constructors
+      Program();//Default Constructor
+      Program(string, string, string, string);//Custom Constructor
+
+      //Methods
+      void inputProg();      
+      void displayProg();
+
+      //Mutator Method
+      bool setCampus(string);
+      bool setDegree(string);
+      bool setProgram(string, string, string, string); 
+       
+      //Accessor Methods
+      string getCampus();
+      string getDegree();
+      string getMajor();
+      string getMinor();
+    
+
+   private:
+ 
+   string campus, degree, major, minor;
+
+};
+//Hugo Yanez
+//Feb. 28, 2017
+//Test Program header file
+
+#include "program.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+//Constructors
+Program::Program(){//Default Constructor
+   campus = degree = minor = "None";
+   major = "Undeclared";
+}
+//Custom Constructor
+Program::Program(string camp, string deg, string maj, string min){
+   campus = camp;
+   degree = deg;
+   minor = min;
+   major = maj;
+}
+
+//Methods
+void Program::inputProg(){
+   string camp = "None";
+   string deg = "None";
+   cout << endl;
+   do{
+      if(camp == "None")
+         cout <<"Enter campus: ";
+      else
+         cout << camp <<" is an invalid campus, enter again: ";
+
+      getline(cin, camp);
+   }while( !setCampus(camp) );
+
+   do{
+      if(deg == "None")
+         cout <<"Enter degree: ";
+      else
+         cout << deg <<" is an invalid degree, enter again: ";
+      getline(cin, deg);
+   }while(!setDegree(deg));
+
+   cout <<"Enter Major: ";
+   getline(cin, major);
+
+   cout <<"Enter Minor: ";
+   getline(cin, minor);
+   
+}
+
+void Program::displayProg(){
+   cout <<"Campus: "<< campus << endl;
+   cout <<"Degree: "<< degree << endl;
+   cout <<"Major: " << major << endl;
+   cout <<"Minor: " << minor << endl;
+}
+
+//Method Mutators
+bool Program::setCampus(string camp){
+   bool valid = true;
+      if(camp != "RH" && camp != "LC" && camp != "WC")
+         valid = false;
+      else
+         campus = camp;
+   return(valid);
+}
+
+bool Program::setDegree(string deg){
+   bool valid = true;
+      if(deg != "BS" && deg != "BA")
+         valid = false;
+      else
+         degree = deg;
+   return(valid);
+}
+
+bool Program::setProgram(string camp, string deg, string maj, string min){
+   major = maj;
+   min = min;
+   
+   return(setCampus(camp) && setDegree(deg));
+}
+
+
+//Accessor Methods
+string Program::getCampus(){
+
+   return(campus);
+}
+
+string Program::getDegree(){
+
+   return(degree);
+}
+
+string Program::getMajor(){
+ 
+   return(major);
+}
+
+string Program::getMinor(){
+
+   return(minor);
+}
+/*
+main(){
+
+   Program s1, s2("RH", "BS", "Computer Science", "None");
+   
+   string campus;
+   
+   cout <<"Program created using default constructor is:"<< endl;
+   s1.displayProg();
+   cout << endl;
+
+   cout << "Update the object created by default constructor"<< endl;	
+   s1.inputProg();
+   cout << endl;
+
+   cout << "Updated object is: "<< endl;
+   s1.displayProg();
+   cout << endl;
+ 
+   cout <<"Program using custom constructor is" << endl;
+   s2.displayProg();
+   cout << endl;
+
+   cout << "Enter a new campus: " << endl;
+   cin >> campus;
+
+   if ( s1.setCampus( campus ) )
+   	cout << "Accepted\n";
+   else
+	cout << "Rejected\n";
+   cout << endl;
+
+   cout << "Updated program is: " << endl;
+   s1.displayProg();
+   cout << endl;
+   
+   cout << "Custom program is: " << endl;
+   s2.displayProg();
+
+}*/
+//Hugo Yanez
+//March 3, 2017
+//Courses header file
+
+#include <iostream>
+using namespace std;
+
+class Course{
+
+   public:
+      //Constructors
+      Course();//Default Constructor
+      Course(string, string, int, string, string);//Custom Constructor
+      
+      //Methods that allows for external input and displays the course information
+      void inputCourse();
+      void displayCourse();
+      void calculateGPA();
+      void calculateCreditsEarned();     
+
+      //Mutator method that sets the course 
+      void setCourse(string, string, int, string, string);
+      bool setGrade(string);
+      
+      //Accessor Methods
+      int getCredit();
+      string getCname();
+      string getCid();
+      string getInstructor();
+      string getGrade();
+      
+   private:
+      string cname, cid, instructor, grade;
+      int credit;
+
+};
+//Hugo Yanez
+//March 3, 2017
+//Source file that contains the constructors and methods of the class Course
+
+#include "course.h"
+
+//Constructors
+
+//Default Constructor
+Course::Course(){
+   cname = cid = instructor = grade = "Unkown";
+   credit = 0;
+}
+//Custom Constructor
+Course::Course(string nm, string id, int cred, string inst, string gr){
+   cname = nm;
+   cid = id;
+   credit = cred;
+   instructor = inst;
+   grade = gr;
+}
+
+//Methods that allow for external input and displays information
+void Course::inputCourse(){
+   string gr = "None";
+
+   cout <<"Enter Course Name: ";
+   cin >> cname;
+   
+   cout <<"Enter Course ID: ";
+   cin >> cid;
+ 
+   cout <<"Enter Course Instructor: ";
+   cin >> instructor;
+   
+   gr = "default";
+   while (!setGrade(gr)){
+      if( gr == "None" || gr=="default"){
+         cout <<"Enter Grade: ";
+   		getline(cin,gr);
+	}
+	else{
+         cout << gr << " is an invalid grade.  ";
+		gr = "default";
+	}     
+   }
+   
+   cout <<"Enter # of Credits: ";
+   cin >> credit;
+
+}
+
+void Course::displayCourse(){
+
+   cout << "Course Name: " << cname << endl;
+   cout << "Course ID: " << cid << endl;
+   cout << "Course Instructor: " << instructor << endl;
+   cout << "Grade: " << grade << endl;
+   cout << "Number of Credits: " << credit << endl;
+
+}
+
+void Course::calculateGPA(){
+
+}
+
+void Course::calculateCreditsEarned(){
+
+}
+
+//Mutator Methods
+void Course::setCourse(string nm, string id, int cred, string inst, string gr){
+   cname = nm;
+   cid = id;
+   instructor = inst;
+   if(setGrade(gr))
+      grade = gr;
+   credit = cred;  
+
+}
+
+bool Course::setGrade(string g){
+   bool valid = false;
+   string validGrades[12]={"A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F", "W", "WF"};
+   for (int i = 0; i< 12; i++){
+	if(validGrades[i]==g){
+      	grade = g;
+      	valid = true;
+	break;
+   	}
+   }
+   return(valid);
+}   
+
+//Accessor Methods
+int Course::getCredit(){
+
+   return(credit);
+}
+
+string Course::getCname(){
+
+   return(cname);
+}
+
+string Course::getCid(){
+
+   return(cid);
+} 
+
+string Course::getInstructor(){
+
+   return(instructor);
+}
+
+string Course::getGrade(){
+
+   return(grade);
+}
+
+/*   
+main(){
+   
+   Course c, c1("CISC2000", "21087", 4, "Professor Papadakis", "A-");
+
+   cout << "Course created using default constructor: " << endl;
+   c.displayCourse();
+   
+   cout << endl;
+   cout << "Course created using custom constructor: " << endl;
+   c1.displayCourse();
+   
+   cout << endl;
+   cout << "Update the object created by default constructor" << endl;
+   c.inputCourse();
+
+   cout << endl;
+   cout << "Updated object is: " << endl;
+   c.displayCourse();
+}*/
+//Hugo Yanez
+//March 7, 2017
+//Phone class header file
+
+#include <iostream>
+using namespace std;
+
+class Phone{
+   public:
+      //Constructors
+      Phone(int =10); //Default constructor
+      Phone(int, int, int, int =10);//Customized Constructor
+      
+      //Methods
+      void inputPhone();
+      void displayPhone();
+
+      //Accesor Methods
+      int getArea();
+      int getExchange();
+      int getLine();
+
+
+   private:
+      int area, exchange, line;
+      const int MAX_TEXTS;
+
+
+};
+//Hugo Yanez
+//March 7, 2017
+//Phone class source file
+
+#include "phone.h"
+
+//Constructors
+//Default Constructor
+Phone::Phone(int m):MAX_TEXTS(m){
+   area = exchange = line = 0;
+
+}
+
+//Custom Custructor
+Phone::Phone(int ar, int ex, int lin, int max):MAX_TEXTS(max){
+   area = ar;
+   exchange = ex;
+   line = lin;
+}
+
+//Methods
+void Phone::inputPhone(){
+   cout << "Enter Phone Number: " << endl;
+   cout << "Enter area code: ";
+   cin >> area;
+  
+   cout << "Enter exchange code: ";
+   cin >> exchange;
+
+   cout<< "Enter line code: ";
+   cin >> line;
+   
+}
+
+void Phone::displayPhone(){
+   
+   cout << "(" << area << ")" << exchange << "-" << line << endl;
+   cout << "The max number of texts is: " << MAX_TEXTS << endl;
+}
+
+//Accessor Methods
+int Phone::getArea(){
+
+   return(area);
+}
+
+int Phone::getExchange(){
+
+   return(exchange);
+}
+
+int Phone::getLine(){
+
+   return(line);
+}
+
+/*
+main(){
+
+   Phone p, p1(914, 374, 4483);
+
+   cout << "Phone number created using default constructor:" << endl;
+   p.displayPhone();
+
+   cout << endl;
+   cout << "Phone number created using custom constructor:" << endl;
+   p1.displayPhone();
+
+   cout << endl;
+   cout << "Update the object created by default contructor:" << endl;
+   p.inputPhone();
+
+   cout << endl;
+   cout << "Updated object is : " << endl;
+   p.displayPhone();
+}*/
+//Hugo Yanez
+//February 24, 2017
+//Class that contains all the information of a Fordham University student
+
+
+#include <iostream>
+#include <string>
+#include "name.h"
+#include "date.h"
+#include "program.h"
+#include "course.h"
+#include "phone.h"
+
+using namespace std;
+
+class Student{
+
+  
+   public:
+      //Class Constructors
+      Student();
+      //Default Constructor
+      Student(Name, Date, Program, string, string /*Course, int, int, int, Phone, Phone, char*/);//Custom Constructor    
+    
+      //Class level external input/output
+      void input();
+      //void inputCourseDescription();
+      //void inputPhoneNum();
+      void display();
+      
+      //Mutator Methods
+      bool setDate(int, int, int);      
+      bool setCampus(string);
+      bool setDegree(string);
+      bool setName(string, char, string);
+      void setFirst(string);
+      void setMiddle(char);
+      void setLast(string);
+      void setStudent(string, string);
+      bool setProgram(string, string, string, string);
+
+      //Accessor Methods 
+      int getMonth();
+      int getDay();
+      int getYear();
+      string getCampus();
+      string getDegree();
+      string getMajor();
+      string getMinor();
+      string getFirst();
+      char getMiddle();
+      string getLast();
+      
+
+   private:
+      string gender, id;
+      Name nm;
+      Date bday;
+      Program pg;
+      Course completedCourses[10]; 
+      int numCourses, creditsEarned, gpa;
+      Phone cell, home;
+      char preferred;
+};
+//Hugo Yanez
+//February 24, 2017
+//File that contains information of a University student using Student Class
+
+#include "student.h"
+
+//Class Definitions
+//Default constructor which sets the data members to the default date 0.0.0
+Student::Student(){
+   nm;
+   //completedCourses[10];
+   //numCourses = 0;
+   //creditsEarned = 0;
+   //gpa = 0;
+   bday;
+   //cell;
+   //home;
+   //preferred = '?';
+   
+//   Program();
+   pg;
+   gender = "None";
+   id = "None";
+}
+
+//Custrom Constructor which takes in six arguments and initializes the data members to each argument
+Student::Student(Name n, Date d, Program p, string gen, string ids)/*, Course com, int num, int cred, int g, Phone c, Phone h, char prefer)*/{
+   
+   nm = n;
+   bday = d;
+   pg = p;
+   gender = gen;
+   id = ids;
+   //completedCourses[10]= com;
+   //numCourses = num;
+   //creditsEarned = cred;
+   //cell = c;
+   //home = h;
+   //preferred = prefer;
+   
+}
+
+//Input method to populate the data members from external user input.
+void Student::input(){
+   string first, last, campus, degree, major, minor;
+   int month, day, year;
+   char middle;    
+ 
+   cout << endl;
+   
+   cout <<"Enter Name: ";
+   nm.inputName();
+  
+   cout<<"Enter Date of Birth: ";
+   bday.inputDate();
+   bday.setDate(month, day, year);
+  
+   cout<<"Enter Program: ";
+   pg.inputProg();
+   
+   cout <<"Enter Fordham ID: ";
+   cin >> id;
+   
+   cout <<"Enter gender: ";
+   cin >> gender; 
+   setStudent(gender, id);
+   cout << endl;
+}
+
+/*Student::inputCourseDescription(){
+   cout << "Enter Course: " << endl;
+   completedCourses[10].inputCourse();
+
+}*/
+
+/*Student::inputPhoneNum(){
+   cout << "Enter Phone number: " << endl;
+   cell.inputPhone();
+   cout << endl;
+   
+   cout << "Enter Phone number: " << endl;
+   home.inputPhone();
+   cout << endl;
+}*/
+//Mutator methods 
+void Student::setStudent(string gen, string ids){
+   gender = gen;
+   id = ids;
+
+}
+
+//Display method that displays the concents of all the data members
+void Student::display(){
+   cout << endl;
+   nm.displayName();
+   cout << "Fordham ID: " << id << endl;
+   bday.displayDate();
+   cout << "Gender: " << gender << endl;
+   pg.displayProg();
+}
+
+
+
+
+int main(){
+        
+	// TEST AN INSTANCE OF THE UNIVERSITY CLASS BUILT AND POPULATED
+	// THROUGH A CONSTRUCTOR THAT TAKES SPECIFIC ARGUMENTS.
+
+	
+	// Instantiate each of the following objects for a specific student's name, bday and program of study
+	Name sname( "Ella", 'M', "Kanaris" );
+	Date sbday( 5, 21, 1989 );
+	Program sprogram;
+        
+	// Fill in the program information (e.g. sprogram) from external input
+	sprogram.inputProg();
+
+	// Instantiate a student object using the objects constructed above.
+	// Note that you need a constructor in the student class that 
+	// matches the call.
+	//
+	// Note that the first three arguments are objects of classes
+	cout << endl;
+        cout << "Student 1:" << endl;
+        Student s1( sname, sbday, sprogram, "Female", "A13160720");
+
+	// Display the object invoking your display method
+	s1.display();
+        
+        
+	// TEST AN INSTANCE OF THE STUDENT CLASS BUILT BY THE 
+	// DEFAULT CONSTRUCTOR AND POPULATED THOUGH USER INPUT
+	
+	
+	// Instantiate a second object of the student class using the default constructor
+ 	cout << endl;
+	cout <<"STUDENT 2:" << endl;
+        Student s2(sname, sbday, sprogram, "Male", "A12652979"); 
+        s2.display();	
+	// invoke the appropriate method to populate the new object from external user input
+	s2.input();
+
+	// Display the new object invoking your display method
+ 	s2.display();
+        cout << endl;
+       /*
+        cout << "Create an array of up to 10 student objects." << endl;
+	Student st[10];
+	// Prompt the user to populate as many of
+	// of the objects as necessary.	
+	st[10].input();
+        cout << endl;
+	
+	// Once all the objects have been filled
+	// with the necessary data
+	// display all the data for each student.       
+        st[10].display();  
+        //TEST AN INSTANCE OF THE STUDENT CLASS BUILT BY THE 
+	// DEFAULT CONSTRUCTOR AND POPULATED THROUGH USER INPUT
+	
+	
+	// Instantiate an object of the student class using the default constructor
+ 	
+	
+	// Test suite
+	//
+	
+
+	// Instantiate an object of the student class using a constructor that takes in specific data
+
+
+	//
+	// Test suite
+        */
+}
+
+torm:~/cisc2000/classeshyanez@storm classes]$ g++ student.cpp name.cpp date.cpp program.cpp course.cpp 
+ .
+ne.cpp
+torm:~/cisc2000/classeshyanez@storm classes]$ ./a.out
+
+Enter campus: LK
+LK is an invalid campus, enter again: RH
+Enter degree: BK
+BK is an invalid degree, enter again: BA
+Enter Major: Computer Science
+Enter Minor: Psychology
+
+Student 1:
+
+Ella M Kanaris
+Fordham ID: A13160720
+5/21/1989
+Gender: Female
+Campus: RH
+Degree: BA
+Major: Computer Science
+Minor: Psychology
+
+STUDENT 2:
+
+Ella M Kanaris
+Fordham ID: A12652979
+5/21/1989
+Gender: Male
+Campus: RH
+Degree: BA
+Major: Computer Science
+Minor: Psychology
+
+Enter Name: 
+Enter first name: Hugo
+Enter middle initial: D
+Enter last name: Yanez
+Enter Date of Birth: 
+Enter month: 6
+Enter day: 26
+Enter year: 1997
+Enter Program: 
+Enter campus:  is an invalid campus, enter again: RH
+Enter degree: BS
+Enter Major: Biology
+Enter Minor: Chemistry
+Enter Fordham ID: A13190760
+Enter gender: Male
+
+
+Hugo D Yanez
+Fordham ID: A13190760
+6/26/1997
+Gender: Male
+Campus: RH
+Degree: BS
+Major: Biology
+Minor: Chemistry
+
+torm:~/cisc2000/classeshyanez@storm classes]$ exit
+exit
+
+Script done on Tue 07 Mar 2017 09:55:59 AM EST
